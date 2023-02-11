@@ -95,7 +95,7 @@ wait_connect(ListenSocket) ->
 register_user(Id, PassWord, _Socket) ->
   case ets:lookup(id, Id) of
     [_Ok] ->
-      io:format("~ts~n",[list_to_binary("账号已存在")]),
+      io:format("~ts~n",["账号已存在"]),
       "账号已存在";
     _ ->
       ets:insert(id, {Id, PassWord, 0, 0}),
@@ -125,7 +125,7 @@ login_out(Id, Socket) ->
       [gen_tcp:send(Socket, term_to_binary("用户"++integer_to_list(Id)++"离开了聊天室"))|| {_,_,_,Socket} <- OnlineList],
       "注销成功";
     _ ->
-      io:format("~ts~n",[list_to_binary("注销失败")]),
+      io:format("~ts~n",["注销失败"]),
       "注销失败"
   end.
 
@@ -136,12 +136,12 @@ group_chat(Socket, MessageInfos) ->
       Res = ets:match_object(id, {'_', '_', 1, '_'}),
       case Res =:= [] of
         true ->
-          io:format("~ts~n",[list_to_binary("现在没有在线玩家")]);
+          io:format("~ts~n",["现在没有在线玩家"]);
         _ ->
           group_send_msg(Res, Id, MessageInfos)
       end;
     _ ->
-      io:format("~ts~n",[list_to_binary("未登录，群聊失败")])
+      io:format("~ts~n",["未登录，群聊失败"])
   end.
 
 
@@ -160,12 +160,12 @@ private_chat(SendId, Socket, MessageInfos) ->
       Res = ets:match_object(id, {SendId, '_', 1, '_'}),
       case Res =:= [] of
         true ->
-          io:format("~ts~n",[list_to_binary("私聊对象不在线")]);
+          io:format("~ts~n",["私聊对象不在线"]);
         _ ->
           private_send_msg(Res, Id, MessageInfos)
       end;
     _ ->
-      io:format("~ts~n",[list_to_binary("未登录，私聊失败")])
+      io:format("~ts~n",["未登录，私聊失败"])
   end.
 
 %% 私聊发送
